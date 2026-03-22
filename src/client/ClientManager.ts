@@ -151,6 +151,22 @@ class ClientManager {
             .catch(console.error);
     }
 
+    public async CleanSlashCommands() {
+        try {
+            const rest = new REST({ version: "10" }).setToken(process.env.TOKEN!);
+
+            await rest.put(Routes.applicationCommands(process.env.CLIENT_ID!), { body: [] });
+
+            const guildIds = Object.values(this.options.client.guilds.cache.map(guild => guild.id));
+
+            for (const guildId of Object.values(guildIds)) {
+                await rest.put(Routes.applicationGuildCommands(process.env.CLIENT_ID!, guildId), { body: [] });
+            }
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
     private HandleSlashCommand(interaction: ChatInputCommandInteraction) {
         const command = this.slashCommandRegistry.GetInteraction(interaction.commandName);
         if(!command) return;
