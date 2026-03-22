@@ -1,0 +1,30 @@
+{
+    "compilerOptions": {
+        "target": "esnext",
+        "module": "esnext",
+        "lib": ["ESNext"],
+        "moduleResolution": "Node",
+        "moduleDetection": "force",
+        "strict": true,
+        "noImplicitAny": true,
+        "declaration": true,
+        "skipLibCheck": true,
+        "strictNullChecks": true,
+        "resolveJsonModule": true,
+        "outDir": "dist",
+        "esModuleInterop": true,
+        "baseUrl": ".",
+        "paths": {
+            "events/*": ["./src/events/*"],
+            "interactions/*": ["./src/interactions/*"],
+            "client/*": ["./src/client/*"],
+            "interfaces/*": ["./src/interfaces/*"]
+        }
+    },
+    "include": [
+        "src"
+    ],
+    "exclude": [
+        "node_modules", "dist"
+    ]
+}

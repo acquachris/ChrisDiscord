@@ -1,0 +1,35 @@
+{
+    "name": "chrisdiscord",
+    "version": "1.0.0",
+    "description": "A Discord Client Manager for Discord.js",
+    "keywords": [
+        "discord.js",
+        "discord"
+    ],
+    "homepage": "https://github.com/acquachris/ChrisDiscord#readme",
+    "bugs": {
+        "url": "https://github.com/acquachris/ChrisDiscord/issues"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/acquachris/ChrisDiscord.git"
+    },
+    "license": "MIT",
+    "author": "acquachris",
+    "type": "module",
+    "main": "dist/index.js",
+    "types": "dist/index.d.ts",
+    "scripts": {
+        "dev": "tsx watch src/index.ts",
+        "build": "tsc --project tsconfig.json && tsc-alias -p tsconfig.json",
+        "start": "node .",
+        "prepublishOnly": "npm run build"
+    },
+    "devDependencies": {
+        "tsc-alias": "^1.8.16",
+        "typescript": "^5.9.3"
+    },
+    "dependencies": {
+        "discord.js": "^14.25.1"
+    }
+}
