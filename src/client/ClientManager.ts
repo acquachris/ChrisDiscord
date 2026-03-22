@@ -111,7 +111,7 @@ class ClientManager {
         }
     }
 
-    public RegisterSlashCommand(){
+    private RegisterSlashCommand(){
         if(!this.client.token){
             throw new Error("[ClientManager] Client token not set!");
         }

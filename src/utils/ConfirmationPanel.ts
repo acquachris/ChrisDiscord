@@ -1,13 +1,20 @@
-import { ActionRowBuilder, BaseInteraction, ButtonBuilder, ButtonStyle, ColorResolvable, Colors, EmbedBuilder } from "discord.js";
+import { ActionRowBuilder, BaseInteraction, ButtonBuilder, ButtonInteraction, ButtonStyle, ColorResolvable, Colors, EmbedBuilder } from "discord.js";
 
 interface ConfirmationPanelOptions {
     interaction: BaseInteraction
     embedTitle?: string;
     embedDescription?: string;
     embedColor?: ColorResolvable;
-    onConfirm: () => Promise<void> | void;
-    onCancel?: () => Promise<void> | void;
+    onConfirm: (i: ButtonInteraction) => Promise<void> | void;
+    onCancel?: (i: ButtonInteraction) => Promise<void> | void;
     timeout?: number;
+
+    confirmButtonLabel?: string;
+    cancelButtonLabel?: string;
+    confirmButtonEmoji?: string;
+    cancelButtonEmoji?: string;
+    confirmButtonStyle?: ButtonStyle;
+    cancelButtonStyle?: ButtonStyle;
 }
 
 class ConfirmationPanel {
@@ -19,7 +26,14 @@ class ConfirmationPanel {
             embedColor = Colors.Blue, 
             onConfirm, 
             onCancel, 
-            timeout = 30_000 
+            timeout = 30_000,
+
+            confirmButtonLabel = "Conferma", 
+            cancelButtonLabel = "Annulla", 
+            confirmButtonEmoji = "✅", 
+            cancelButtonEmoji = "✖️", 
+            confirmButtonStyle = ButtonStyle.Success, 
+            cancelButtonStyle = ButtonStyle.Danger,
         } = options;
 
         if(!interaction.isRepliable()){
@@ -28,15 +42,15 @@ class ConfirmationPanel {
 
         const confirmButton = new ButtonBuilder()
             .setCustomId(`confirmpanel:confirm:${interaction.id}`)
-            .setLabel("Conferma")
-            .setStyle(ButtonStyle.Success)
-            .setEmoji("✅");
+            .setLabel(confirmButtonLabel)
+            .setStyle(confirmButtonStyle)
+            .setEmoji(confirmButtonEmoji);
 
         const cancelButton = new ButtonBuilder()
             .setCustomId(`confirmpanel:cancel:${interaction.id}`)
-            .setLabel("Annulla")
-            .setStyle(ButtonStyle.Danger)
-            .setEmoji("✖️");
+            .setLabel(cancelButtonLabel)
+            .setStyle(cancelButtonStyle)
+            .setEmoji(cancelButtonEmoji);
 
         const row = new ActionRowBuilder<ButtonBuilder>().addComponents(confirmButton, cancelButton);
 
@@ -57,14 +71,16 @@ class ConfirmationPanel {
             });
 
             collector.on("collect", async (i) => {
+                if(!i.isButton()) return;
+
                 const action = i.customId.split(":")[1];
 
                 if (action === "confirm") {
-                    await onConfirm();
+                    await onConfirm(i);
 
                     collector.stop("success");
                 } else {
-                    if (onCancel) await onCancel();
+                    if (onCancel) await onCancel(i);
 
                     collector.stop("cancelled");
 
