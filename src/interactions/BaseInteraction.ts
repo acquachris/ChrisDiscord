@@ -14,7 +14,9 @@ abstract class BaseInteraction<T extends DiscordBaseInteraction, TBuilder> {
 
     public readonly requiredRoles: string[] = [];
     public readonly allowedRoles: string[] = [];
+    public readonly disallowedRoles: string[] = [];
     public readonly isOwnerOnly: boolean = false;
+
     public readonly disabled: boolean = false;
 
     protected abstract Run(interaction: T): Promise<void>;
@@ -51,6 +53,22 @@ abstract class BaseInteraction<T extends DiscordBaseInteraction, TBuilder> {
         return pass;
     }
 
+    private CheckDisallowedRoles(interaction: T): boolean {
+        // Allow interaction if no disallowed roles have been defined.
+        if(this.disallowedRoles.length === 0) return true;
+
+        // Reject interaction if member doesn't exist
+        if(!interaction.member) return false;
+
+        const member = interaction.member as GuildMember;
+
+        const pass = !this.disallowedRoles.some(
+            (roleId) => member.roles.cache.has(roleId)
+        );
+
+        return pass;
+    }
+
     private CheckIsOwner(interaction: T): boolean {
         // Allow interaction if command is not owner only.
         if(!this.isOwnerOnly) return true;
@@ -64,7 +82,7 @@ abstract class BaseInteraction<T extends DiscordBaseInteraction, TBuilder> {
         // Always allow owner.
         if(interaction.user.id === ClientManager.GetInstance().GetOptions().ownerUserId) return true;
         
-        return this.CheckRequiredRoles(interaction) && this.CheckAllowedRoles(interaction) && this.CheckIsOwner(interaction);
+        return this.CheckRequiredRoles(interaction) && this.CheckAllowedRoles(interaction) && this.CheckDisallowedRoles(interaction) && this.CheckIsOwner(interaction);
     }
 
     public async Execute(interaction: T){
