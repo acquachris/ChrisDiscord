@@ -10,10 +10,14 @@ abstract class ParameterizedInteraction<TInteraction extends DiscordBaseInteract
         );
     }
 
-    public static GetBuilder<T extends ParameterizedInteraction<any, any>>(
-        this: new () => T,
+    public static GetBuilder<
+        TInteraction extends DiscordBaseInteraction,
+        TBuilder extends BuilderWithCustomId,
+        TInstance extends ParameterizedInteraction<TInteraction, TBuilder>
+    >(
+        this: new () => TInstance,
         params: Record<string, string> = {}
-    ){
+    ): TBuilder {
         const instance = new this();
         const builder = instance.builder;
 
