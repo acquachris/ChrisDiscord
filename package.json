@@ -1,6 +1,6 @@
 {
     "name": "chrisdiscord",
-    "version": "1.3.3",
+    "version": "1.3.4",
     "description": "A Discord Client Manager for Discord.js",
     "keywords": [
         "discord.js",
@@ -21,13 +21,12 @@
     "types": "dist/index.d.ts",
     "scripts": {
         "dev": "tsx watch src/index.ts",
-        "build": "tsup src/index.ts --format esm --dts",
+        "build": "tsc --project tsconfig.json && tsc-alias -p tsconfig.json",
         "start": "node .",
         "prepublishOnly": "npm run build"
     },
     "devDependencies": {
         "tsc-alias": "^1.8.16",
-        "tsup": "^8.5.1",
         "typescript": "^5.9.3"
     },
     "dependencies": {
