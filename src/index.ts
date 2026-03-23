@@ -21,7 +21,7 @@ export * from "./interactions/StringSelectMenu";
 export * from "./interactions/UserSelectMenu";
 
 // Interfaces
-export * from "./interfaces/BuilderWithCustomId";
+export * from "./types/BuilderWithCustomId";
 
 // Utils
 export * from "./utils/ConfirmationPanel";

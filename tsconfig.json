@@ -18,7 +18,7 @@
             "events/*": ["./src/events/*"],
             "interactions/*": ["./src/interactions/*"],
             "client/*": ["./src/client/*"],
-            "interfaces/*": ["./src/interfaces/*"]
+            "types/*": ["src/types/*"]
         }
     },
     "include": [

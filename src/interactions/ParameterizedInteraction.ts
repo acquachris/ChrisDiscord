@@ -1,5 +1,5 @@
 import { BaseInteraction } from "interactions/BaseInteraction";
-import { BuilderWithCustomId } from "interfaces/BuilderWithCustomId";
+import { BuilderWithCustomId } from "types/BuilderWithCustomId";
 import { APIButtonComponentWithCustomId, BaseInteraction as DiscordBaseInteraction } from "discord.js";
 
 abstract class ParameterizedInteraction<TInteraction extends DiscordBaseInteraction, TBuilder extends BuilderWithCustomId> extends BaseInteraction<TInteraction, TBuilder> {
@@ -21,10 +21,10 @@ abstract class ParameterizedInteraction<TInteraction extends DiscordBaseInteract
         const instance = new this();
         const builder = instance.builder;
 
-        if (builder.data.custom_id) {
-            (builder.data as any).custom_id = instance.ApplyParams(
-                builder.data.custom_id,
-                params
+        // Only apply params if this builder supports custom IDs
+        if ("setCustomId" in builder && "custom_id" in builder.data && builder.data.custom_id) {
+            builder.setCustomId(
+                instance.ApplyParams(builder.data.custom_id, params)
             );
         }
 
