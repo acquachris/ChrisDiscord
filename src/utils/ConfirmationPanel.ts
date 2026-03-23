@@ -112,7 +112,7 @@ class ConfirmationPanel {
                 });
                 const i = collected.first();
                 if(i && !i.replied){
-                    i.deferReply();
+                    i.deferUpdate();
                 }
             });
         } catch (e) {
