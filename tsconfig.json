@@ -1,7 +1,7 @@
 {
     "compilerOptions": {
         "target": "ESNext",
-        "module": "commonjs",
+        "module": "ESNext",
         "lib": ["ESNext"],
         "moduleResolution": "Node",
         "moduleDetection": "force",
@@ -13,6 +13,7 @@
         "resolveJsonModule": true,
         "outDir": "dist",
         "esModuleInterop": true,
+        "forceConsistentCasingInFileNames": true,
         "baseUrl": ".",
         "paths": {
             "events/*": ["src/events/*"],
@@ -25,6 +26,7 @@
         "src"
     ],
     "exclude": [
-        "node_modules", "dist"
+        "node_modules",
+        "dist"
     ]
 }

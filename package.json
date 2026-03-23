@@ -1,6 +1,6 @@
 {
     "name": "chrisdiscord",
-    "version": "1.3.5",
+    "version": "1.3.6",
     "description": "A Discord Client Manager for Discord.js",
     "keywords": [
         "discord.js",
@@ -16,7 +16,7 @@
     },
     "license": "MIT",
     "author": "acquachris",
-    "type": "commonjs",
+    "type": "module",
     "main": "dist/index.js",
     "types": "dist/index.d.ts",
     "scripts": {
