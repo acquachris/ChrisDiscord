@@ -1,5 +1,5 @@
-import { BaseInteraction } from "interactions/BaseInteraction.js";
-import { BuilderWithCustomId } from "types/BuilderWithCustomId.js";
+import { BaseInteraction } from "interactions/BaseInteraction";
+import { BuilderWithCustomId } from "types/BuilderWithCustomId";
 import { APIButtonComponentWithCustomId, BaseInteraction as DiscordBaseInteraction } from "discord.js";
 
 abstract class ParameterizedInteraction<TInteraction extends DiscordBaseInteraction, TBuilder extends BuilderWithCustomId> extends BaseInteraction<TInteraction, TBuilder> {

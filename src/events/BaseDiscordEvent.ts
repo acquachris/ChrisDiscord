@@ -1,4 +1,4 @@
-import { ClientManager } from "client/ClientManager.js";
+import { ClientManager } from "client/ClientManager";
 import { AttachmentBuilder, ClientEvents, codeBlock, EmbedBuilder } from "discord.js";
 
 abstract class BaseDiscordEvent<T extends any[] = any[]> {

@@ -1,26 +1,26 @@
 // Client
-export * from "./client/ClientManager.js";
+export * from "./client/ClientManager";
 
 // Events
-export * from "./events/BaseDiscordEvent.js";
-export * from "./events/EventRegistry.js";
+export * from "./events/BaseDiscordEvent";
+export * from "./events/EventRegistry";
 
 // Interactions
-export * from "./interactions/BaseInteraction.js";
-export * from "./interactions/BaseSelectMenu.js";
-export * from "./interactions/ChannelSelectMenu.js";
-export * from "./interactions/DiscordButton.js";
-export * from "./interactions/DiscordModal.js";
-export * from "./interactions/InteractionRegistry.js";
-export * from "./interactions/ParameterizedInteraction.js";
-export * from "./interactions/RoleSelectMenu.js";
-export * from "./interactions/SlashCommand.js";
-export * from "./interactions/StringSelectMenu.js";
-export * from "./interactions/UserSelectMenu.js";
+export * from "./interactions/BaseInteraction";
+export * from "./interactions/BaseSelectMenu";
+export * from "./interactions/ChannelSelectMenu";
+export * from "./interactions/DiscordButton";
+export * from "./interactions/DiscordModal";
+export * from "./interactions/InteractionRegistry";
+export * from "./interactions/ParameterizedInteraction";
+export * from "./interactions/RoleSelectMenu";
+export * from "./interactions/SlashCommand";
+export * from "./interactions/StringSelectMenu";
+export * from "./interactions/UserSelectMenu";
 
 // Types
-export * from "./types/BuilderWithCustomId.js";
+export * from "./types/BuilderWithCustomId";
 
 // Utils
-export * from "./utils/ConfirmationPanel.js";
-export * from "./utils/MessageUtils.js";
+export * from "./utils/ConfirmationPanel";
+export * from "./utils/MessageUtils";

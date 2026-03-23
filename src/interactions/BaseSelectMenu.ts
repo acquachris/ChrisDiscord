@@ -1,5 +1,5 @@
 import { AnySelectMenuInteraction, BaseSelectMenuBuilder } from "discord.js";
-import { ParameterizedInteraction } from "interactions/ParameterizedInteraction.js";
+import { ParameterizedInteraction } from "interactions/ParameterizedInteraction";
 
 abstract class BaseSelectMenu<TInteraction extends AnySelectMenuInteraction, TBuilder extends BaseSelectMenuBuilder<any>> extends ParameterizedInteraction<TInteraction, TBuilder> {
     // Can be overwritten

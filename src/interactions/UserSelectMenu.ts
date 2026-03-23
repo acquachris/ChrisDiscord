@@ -1,5 +1,5 @@
 import { UserSelectMenuBuilder, UserSelectMenuInteraction } from "discord.js";
-import { BaseSelectMenu } from "interactions/BaseSelectMenu.js";
+import { BaseSelectMenu } from "interactions/BaseSelectMenu";
 
 abstract class UserSelectMenu extends BaseSelectMenu<UserSelectMenuInteraction, UserSelectMenuBuilder> {
     abstract builder: UserSelectMenuBuilder;
