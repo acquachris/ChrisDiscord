@@ -21,7 +21,7 @@
     "types": "dist/index.d.ts",
     "scripts": {
         "dev": "tsx watch src/index.ts",
-        "build": "npm tsdown",
+        "build": "npx tsdown",
         "start": "node .",
         "prepublishOnly": "npm run build"
     },
