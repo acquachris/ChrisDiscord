@@ -1,11 +1,11 @@
 import { AnySelectMenuInteraction, AttachmentBuilder, ButtonInteraction, CacheType, ChatInputCommandInteraction, Client, codeBlock, EmbedBuilder, Interaction, ModalSubmitInteraction, REST, RESTPostAPIChatInputApplicationCommandsJSONBody, Routes } from "discord.js";
-import { InteractionRegistry } from "interactions/InteractionRegistry";
-import { SlashCommand } from "interactions/SlashCommand";
-import { DiscordButton } from "interactions/DiscordButton";
-import { BaseSelectMenu } from "interactions/BaseSelectMenu";
-import { DiscordModal } from "interactions/DiscordModal";
-import { EventRegistry } from "events/EventRegistry";
-import { BaseDiscordEvent } from "events/BaseDiscordEvent";
+import { InteractionRegistry } from "interactions/InteractionRegistry.js";
+import { SlashCommand } from "interactions/SlashCommand.js";
+import { DiscordButton } from "interactions/DiscordButton.js";
+import { BaseSelectMenu } from "interactions/BaseSelectMenu.js";
+import { DiscordModal } from "interactions/DiscordModal.js";
+import { EventRegistry } from "events/EventRegistry.js";
+import { BaseDiscordEvent } from "events/BaseDiscordEvent.js";
 
 interface ClientOptions {
     client: Client;
@@ -79,30 +79,35 @@ class ClientManager {
             await this.slashCommandRegistry.LoadFolder(folder);
         }
         this.slashCommandRegistry.LoadInteractions(this.options.slashCommandInstances ?? []);
+        console.log(`[ClientManager] Loaded ${this.slashCommandRegistry.GetInteractions().length} slash commands.`)
 
         // Load Button Registry
         for(const folder of this.options.buttonFolders ?? []){
             await this.buttonCommandRegistry.LoadFolder(folder);
         }
         this.buttonCommandRegistry.LoadInteractions(this.options.buttonInstances ?? []);
+        console.log(`[ClientManager] Loaded ${this.buttonCommandRegistry.GetInteractions().length} buttons.`)
 
         // Load Select Menu Registry
         for(const folder of this.options.selectMenuFolders ?? []){
             await this.selectMenuRegistry.LoadFolder(folder);
         }
         this.selectMenuRegistry.LoadInteractions(this.options.selectMenuInstances ?? []);
+        console.log(`[ClientManager] Loaded ${this.selectMenuRegistry.GetInteractions().length} select menus.`)
 
         // Load Modal Registry
         for(const folder of this.options.modalFolders ?? []){
             await this.modalRegistry.LoadFolder(folder);
         }
         this.modalRegistry.LoadInteractions(this.options.modalInstances ?? []);
+        console.log(`[ClientManager] Loaded ${this.modalRegistry.GetInteractions().length} modals.`)
 
         // Load Event Registry
         for(const folder of this.options.eventFolders ?? []){
             await this.eventRegistry.LoadFolder(folder);
         }
         this.eventRegistry.LoadEvents(this.options.eventInstances ?? []);
+        console.log(`[ClientManager] Loaded ${this.eventRegistry.GetAllEvents().length} events.`)
     }
 
     private RegisterEvents(){

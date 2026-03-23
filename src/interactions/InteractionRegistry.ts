@@ -1,39 +1,30 @@
 import * as fs from "fs";
 import * as path from "path";
-import { BaseInteraction } from "./BaseInteraction";
+import { BaseInteraction } from "./BaseInteraction.js";
+import { pathToFileURL } from "url";
 
 class InteractionRegistry<T extends BaseInteraction<any, any>> {
     private interactions: T[] = [];
 
     public async LoadFolder(folder: string) {
-        // Detect dev vs prod automatically
-        const isDev = __dirname.includes("src"); 
-
-        // In dev, folder is relative to src
-        // In prod, folder is relative to dist (no src inside dist)
-        const baseFolder = isDev
-            ? path.join(__dirname, folder)         // dev -> src/commands
-            : path.join(__dirname, folder.replace(/^src\//, "")); // prod -> commands
-
-        if (!fs.existsSync(baseFolder)) return; // prevent ENOENT
-
+        const baseFolder = path.resolve(folder);
         const entries = fs.readdirSync(baseFolder, { withFileTypes: true });
 
         for (const entry of entries) {
             const fullPath = path.join(baseFolder, entry.name);
 
             if (entry.isDirectory()) {
-                await this.LoadFolder(path.join(folder, entry.name));
+                await this.LoadFolder(fullPath);
                 continue;
             }
 
-            // Only load appropriate files
-            if (!entry.name.endsWith(".js") && !(isDev && entry.name.endsWith(".ts"))) continue;
+            if (!entry.name.endsWith(".js") && !entry.name.endsWith(".ts")) continue;
 
-            const module = require(fullPath);
+            // Use dynamic import() instead of require()
+            const module = await import(pathToFileURL(fullPath).href);
             const InteractionClass = module.default ?? module;
 
-            if (!(InteractionClass.prototype instanceof BaseInteraction)) continue;
+            if (typeof InteractionClass !== "function" || !(InteractionClass.prototype instanceof BaseInteraction)) continue;
 
             const instance = new InteractionClass() as T;
             this.interactions.push(instance);

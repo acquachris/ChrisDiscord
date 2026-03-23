@@ -1,39 +1,30 @@
 import * as fs from "fs";
 import * as path from "path";
-import { BaseDiscordEvent } from "./BaseDiscordEvent";
+import { BaseDiscordEvent } from "events/BaseDiscordEvent.js";
+import { pathToFileURL } from "url";
 
 class EventRegistry {
     private events: BaseDiscordEvent[] = [];
 
     public async LoadFolder(folder: string) {
-        // Detect dev vs prod
-        const isDev = __dirname.includes("src");
-
-        // Adjust path: in prod, remove leading "src/" if present
-        const baseFolder = path.isAbsolute(folder)
-            ? folder
-            : path.join(__dirname, isDev ? folder : folder.replace(/^src[\\/]/, ""));
-
-        if (!fs.existsSync(baseFolder)) return; // prevent ENOENT
-
+        const baseFolder = path.resolve(folder);
         const entries = fs.readdirSync(baseFolder, { withFileTypes: true });
 
         for (const entry of entries) {
             const fullPath = path.join(baseFolder, entry.name);
 
             if (entry.isDirectory()) {
-                // recurse into subfolders
-                await this.LoadFolder(path.join(folder, entry.name));
+                await this.LoadFolder(fullPath);
                 continue;
             }
 
-            // Only load appropriate files
-            if (!entry.name.endsWith(".js") && !(isDev && entry.name.endsWith(".ts"))) continue;
+            if (!entry.name.endsWith(".js") && !entry.name.endsWith(".ts")) continue;
 
-            const module = require(fullPath);
+            // Use dynamic import() instead of require()
+            const module = await import(pathToFileURL(fullPath).href);
             const EventClass = module.default ?? module;
 
-            if (!(EventClass.prototype instanceof BaseDiscordEvent)) continue;
+            if (typeof EventClass !== "function" || !(EventClass.prototype instanceof BaseDiscordEvent)) continue;
 
             const instance = new EventClass() as BaseDiscordEvent;
             this.events.push(instance);

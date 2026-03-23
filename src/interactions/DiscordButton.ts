@@ -1,5 +1,5 @@
 import { ButtonBuilder, ButtonInteraction, ButtonStyle } from "discord.js";
-import { ParameterizedInteraction } from "./ParameterizedInteraction";
+import { ParameterizedInteraction } from "./ParameterizedInteraction.js";
 
 abstract class DiscordButton extends ParameterizedInteraction<ButtonInteraction, ButtonBuilder> {
     // Can be overwritten

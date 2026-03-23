@@ -1,5 +1,5 @@
 import { ChatInputCommandInteraction, RESTPostAPIChatInputApplicationCommandsJSONBody, SlashCommandBuilder } from "discord.js";
-import { BaseInteraction } from "interactions/BaseInteraction";
+import { BaseInteraction } from "interactions/BaseInteraction.js";
 
 abstract class SlashCommand extends BaseInteraction<ChatInputCommandInteraction, SlashCommandBuilder> {
     public readonly builder: SlashCommandBuilder = this.CreateBuilder();
