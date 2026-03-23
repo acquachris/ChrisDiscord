@@ -81,11 +81,11 @@ class ConfirmationPanel {
                 const action = i.customId.split(":")[1];
 
                 if (action === "confirm") {
-                    await onConfirm(i);
+                    onConfirm(i);
 
                     collector.stop("success");
                 } else {
-                    if (onCancel) await onCancel(i);
+                    if (onCancel) onCancel(i);
 
                     collector.stop("cancelled");
 
