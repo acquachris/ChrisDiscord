@@ -1,6 +1,6 @@
 {
     "name": "chrisdiscord",
-    "version": "1.3.11",
+    "version": "1.3.12",
     "description": "A Discord Client Manager for Discord.js",
     "keywords": ["discord.js", "discord"],
     "homepage": "https://github.com/acquachris/ChrisDiscord#readme",
@@ -13,30 +13,23 @@
     },
     "license": "MIT",
     "author": "acquachris",
-    "type": "module",
     "main": "./dist/index.cjs",
-    "types": "./dist/index.d.cts",
+    "module": "./dist/index.js",
+    "types": "./dist/index.d.ts",
     "exports": {
         ".": {
-            "import": {
-                "types": "./dist/index.d.ts",
-                "default": "./dist/index.js"
-            },
-            "require": {
-                "types": "./dist/index.d.cts",
-                "default": "./dist/index.cjs"
-            }
+            "import": "./dist/index.js",
+            "require": "./dist/index.cjs"
         }
     },
     "files": ["dist"],
     "scripts": {
         "dev": "tsx watch src/index.ts",
-        "build": "tsdown",
+        "build": "tsc",
         "start": "node .",
-        "prepublishOnly": "npm run build"
+        "publish": "npm publish --access=public"
     },
     "devDependencies": {
-        "tsdown": "^0.21.4",
         "tsx": "^4.0.0",
         "typescript": "^5.9.3"
     },
