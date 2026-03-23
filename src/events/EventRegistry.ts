@@ -1,24 +1,34 @@
 import * as fs from "fs";
 import * as path from "path";
-import { BaseDiscordEvent } from "events/BaseDiscordEvent";
+import { BaseDiscordEvent } from "./BaseDiscordEvent";
 
 class EventRegistry {
     private events: BaseDiscordEvent[] = [];
 
-    public async LoadFolder(folder: string){
-        const resolvedFolder = path.isAbsolute(folder) ? folder : path.resolve(process.cwd(), folder);
+    public async LoadFolder(folder: string) {
+        // Detect dev vs prod
+        const isDev = __dirname.includes("src");
 
-        const entries = fs.readdirSync(resolvedFolder, { withFileTypes: true });
+        // Adjust path: in prod, remove leading "src/" if present
+        const baseFolder = path.isAbsolute(folder)
+            ? folder
+            : path.join(__dirname, isDev ? folder : folder.replace(/^src[\\/]/, ""));
+
+        if (!fs.existsSync(baseFolder)) return; // prevent ENOENT
+
+        const entries = fs.readdirSync(baseFolder, { withFileTypes: true });
 
         for (const entry of entries) {
-            const fullPath = path.join(resolvedFolder, entry.name);
+            const fullPath = path.join(baseFolder, entry.name);
 
             if (entry.isDirectory()) {
-                await this.LoadFolder(fullPath);
+                // recurse into subfolders
+                await this.LoadFolder(path.join(folder, entry.name));
                 continue;
             }
 
-            if (!entry.name.endsWith(".js") && !entry.name.endsWith(".ts")) continue;
+            // Only load appropriate files
+            if (!entry.name.endsWith(".js") && !(isDev && entry.name.endsWith(".ts"))) continue;
 
             const module = require(fullPath);
             const EventClass = module.default ?? module;
@@ -30,19 +40,17 @@ class EventRegistry {
         }
     }
 
-    public LoadEvents(interactionClasses: BaseDiscordEvent[]){
-        this.events.push(...interactionClasses);
+    public LoadEvents(events: BaseDiscordEvent[]) {
+        this.events.push(...events);
     }
 
     public GetAllEvents(): BaseDiscordEvent[] {
         return this.events;
     }
 
-    public GetEvents(eventName: string): BaseDiscordEvent[]{
-        return this.events.filter(
-            interaction => interaction.ValidateEvent(eventName)
-        );
+    public GetEvents(eventName: string): BaseDiscordEvent[] {
+        return this.events.filter(event => event.ValidateEvent(eventName));
     }
-};
+}
 
 export { EventRegistry };
