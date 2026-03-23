@@ -11,24 +11,21 @@ abstract class ParameterizedInteraction<TInteraction extends DiscordBaseInteract
     }
 
     public static GetBuilder<
-        TInteraction extends DiscordBaseInteraction,
-        TBuilder extends BuilderWithCustomId,
-        TInstance extends ParameterizedInteraction<TInteraction, TBuilder>
+        TInstance extends ParameterizedInteraction<DiscordBaseInteraction, BuilderWithCustomId>
     >(
         this: new () => TInstance,
         params: Record<string, string> = {}
-    ): TBuilder {
+    ): TInstance extends ParameterizedInteraction<any, infer TBuilder> ? TBuilder : never {
         const instance = new this();
         const builder = instance.builder;
 
-        // Only apply params if this builder supports custom IDs
         if ("setCustomId" in builder && "custom_id" in builder.data && builder.data.custom_id) {
             builder.setCustomId(
                 instance.ApplyParams(builder.data.custom_id, params)
             );
         }
 
-        return builder;
+        return builder as TInstance extends ParameterizedInteraction<any, infer TBuilder> ? TBuilder : never;
     }
 
     protected ParseParams(customId: string): Record<string, string> | null {

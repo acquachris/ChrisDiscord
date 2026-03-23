@@ -20,7 +20,7 @@ export * from "./interactions/SlashCommand";
 export * from "./interactions/StringSelectMenu";
 export * from "./interactions/UserSelectMenu";
 
-// Interfaces
+// Types
 export * from "./types/BuilderWithCustomId";
 
 // Utils
