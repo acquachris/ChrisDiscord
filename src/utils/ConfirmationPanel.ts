@@ -1,4 +1,4 @@
-import { ActionRowBuilder, BaseInteraction, ButtonBuilder, ButtonInteraction, ButtonStyle, ColorResolvable, Colors, EmbedBuilder } from "discord.js";
+import { ActionRowBuilder, BaseInteraction, ButtonBuilder, ButtonInteraction, ButtonStyle, ColorResolvable, Colors, ComponentType, EmbedBuilder } from "discord.js";
 
 interface ConfirmationPanelOptions {
     interaction: BaseInteraction
@@ -40,6 +40,10 @@ class ConfirmationPanel {
             throw new Error("[ConfirmationPanel] Interaction must be repliable");
         }
 
+        if(!interaction.channel){
+            throw new Error("[ConfirmationPanel] Interaction must have a channel");
+        }
+
         const confirmButton = new ButtonBuilder()
             .setCustomId(`confirmpanel:confirm:${interaction.id}`)
             .setLabel(confirmButtonLabel)
@@ -65,7 +69,8 @@ class ConfirmationPanel {
         });
 
         try {
-            const collector = await response.createMessageComponentCollector({
+            const collector = interaction.channel.createMessageComponentCollector({
+                componentType: ComponentType.Button,
                 filter: (i) => i.user.id === interaction.user.id && i.customId.startsWith(`confirmpanel:`) && i.customId.endsWith(interaction.id),
                 time: timeout,
             });

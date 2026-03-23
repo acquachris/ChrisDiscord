@@ -1,7 +1,6 @@
 import * as fs from "fs";
 import * as path from "path";
 import { BaseInteraction } from "./BaseInteraction.js";
-import { pathToFileURL } from "url";
 
 class InteractionRegistry<T extends BaseInteraction<any, any>> {
     private interactions: T[] = [];
@@ -20,11 +19,10 @@ class InteractionRegistry<T extends BaseInteraction<any, any>> {
 
             if (!entry.name.endsWith(".js") && !entry.name.endsWith(".ts")) continue;
 
-            // Use dynamic import() instead of require()
-            const module = await import(pathToFileURL(fullPath).href);
+            const module = require(fullPath);
             const InteractionClass = module.default ?? module;
 
-            if (typeof InteractionClass !== "function" || !(InteractionClass.prototype instanceof BaseInteraction)) continue;
+            if (!(InteractionClass.prototype instanceof BaseInteraction)) continue;
 
             const instance = new InteractionClass() as T;
             this.interactions.push(instance);
