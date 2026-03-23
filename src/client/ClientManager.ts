@@ -1,11 +1,11 @@
 import { AnySelectMenuInteraction, AttachmentBuilder, ButtonInteraction, CacheType, ChatInputCommandInteraction, Client, codeBlock, EmbedBuilder, Interaction, ModalSubmitInteraction, REST, RESTPostAPIChatInputApplicationCommandsJSONBody, Routes } from "discord.js";
-import { InteractionRegistry } from "interactions/InteractionRegistry";
-import { SlashCommand } from "interactions/SlashCommand";
-import { DiscordButton } from "interactions/DiscordButton";
-import { BaseSelectMenu } from "interactions/BaseSelectMenu";
-import { DiscordModal } from "interactions/DiscordModal";
-import { EventRegistry } from "events/EventRegistry";
-import { BaseDiscordEvent } from "events/BaseDiscordEvent";
+import { InteractionRegistry } from "interactions/InteractionRegistry.js";
+import { SlashCommand } from "interactions/SlashCommand.js";
+import { DiscordButton } from "interactions/DiscordButton.js";
+import { BaseSelectMenu } from "interactions/BaseSelectMenu.js";
+import { DiscordModal } from "interactions/DiscordModal.js";
+import { EventRegistry } from "events/EventRegistry.js";
+import { BaseDiscordEvent } from "events/BaseDiscordEvent.js";
 
 interface ClientOptions {
     client: Client;

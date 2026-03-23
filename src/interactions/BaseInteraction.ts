@@ -1,5 +1,5 @@
 import { AttachmentBuilder, codeBlock, BaseInteraction as DiscordBaseInteraction, EmbedBuilder, GuildMember, MessageFlags } from "discord.js";
-import { ClientManager } from "client/ClientManager";
+import { ClientManager } from "client/ClientManager.js";
 
 abstract class BaseInteraction<T extends DiscordBaseInteraction, TBuilder> {
     protected readonly builder: TBuilder = this.CreateBuilder();

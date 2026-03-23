@@ -1,4 +1,4 @@
-import { BaseInteraction } from "interactions/BaseInteraction";
+import { BaseInteraction } from "interactions/BaseInteraction.js";
 import * as fs from "fs";
 import * as path from "path";
 

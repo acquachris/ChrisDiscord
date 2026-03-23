@@ -1,6 +1,6 @@
 import * as fs from "fs";
 import * as path from "path";
-import { BaseDiscordEvent } from "events/BaseDiscordEvent";
+import { BaseDiscordEvent } from "events/BaseDiscordEvent.js";
 
 class EventRegistry {
     private events: BaseDiscordEvent[] = [];
