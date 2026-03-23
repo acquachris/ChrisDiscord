@@ -16,14 +16,15 @@ import {
     ComponentType,
     ActionRow,
     MessageActionRowComponent,
+    MessageActionRowComponentBuilder,
 } from "discord.js";
 
-export function DisableMessageComponents(message: Message): ActionRowBuilder[] {
+export function DisableMessageComponents(message: Message): ActionRowBuilder<MessageActionRowComponentBuilder>[] {
     return message.components
         .filter((row): row is ActionRow<MessageActionRowComponent> => row.type === ComponentType.ActionRow)
         .map((row) => {
-            const newRow = new ActionRowBuilder();
-            
+            const newRow = new ActionRowBuilder<MessageActionRowComponentBuilder>();
+
             const disabledComponents = row.components.map((component: MessageActionRowComponent) => {
                 switch (component.type) {
                     case ComponentType.Button: {
@@ -50,7 +51,7 @@ export function DisableMessageComponents(message: Message): ActionRowBuilder[] {
                 }
             });
 
-            newRow.addComponents(disabledComponents as any);
+            newRow.addComponents(disabledComponents as MessageActionRowComponentBuilder[]);
             return newRow;
         });
 }
