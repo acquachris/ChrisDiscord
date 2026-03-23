@@ -1,5 +1,3 @@
-// src/index.ts
-
 // Client
 export * from "./client/ClientManager";
 
