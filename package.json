@@ -1,6 +1,6 @@
 {
     "name": "chrisdiscord",
-    "version": "1.3.7",
+    "version": "1.3.8",
     "description": "A Discord Client Manager for Discord.js",
     "keywords": [
         "discord.js",
@@ -18,7 +18,7 @@
     "author": "acquachris",
     "type": "module",
     "main": "dist/index.mjs",
-    "types": "dist/index.d.ts",
+    "types": "dist/index.d.mts",
     "scripts": {
         "dev": "tsx watch src/index.ts",
         "build": "npx tsdown",
