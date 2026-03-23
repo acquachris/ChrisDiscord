@@ -25,3 +25,4 @@ export * from "./types/BuilderWithCustomId";
 
 // Utils
 export * from "./utils/ConfirmationPanel";
+export * from "./utils/MessageUtils";
