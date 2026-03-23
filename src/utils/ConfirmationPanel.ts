@@ -73,6 +73,7 @@ class ConfirmationPanel {
                 componentType: ComponentType.Button,
                 filter: (i) => i.user.id === interaction.user.id && i.customId.startsWith(`confirmpanel:`) && i.customId.endsWith(interaction.id),
                 time: timeout,
+                max: 1,
             });
 
             collector.on("collect", async (i) => {
@@ -88,7 +89,6 @@ class ConfirmationPanel {
                     if (onCancel) onCancel(i);
 
                     collector.stop("cancelled");
-
                 }
             });
 
@@ -110,6 +110,10 @@ class ConfirmationPanel {
                     embeds: [embed],
                     components: [row],
                 });
+                const i = collected.first();
+                if(i && !i.replied){
+                    i.deferReply();
+                }
             });
         } catch (e) {
             throw new Error(`[ConfirmationPanel] ${e}`);
