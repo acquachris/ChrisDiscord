@@ -86,7 +86,11 @@ class ConfirmationPanel {
 
                     collector.stop("success");
                 } else {
-                    if (onCancel) await onCancel(i);
+                    if (onCancel){
+                        await onCancel(i);
+                    }else{
+                        i.deferUpdate();
+                    };
 
                     collector.stop("cancelled");
                 }
@@ -110,10 +114,6 @@ class ConfirmationPanel {
                     embeds: [embed],
                     components: [row],
                 });
-                const i = collected.first();
-                if(i && !i.replied){
-                    i.deferUpdate();
-                }
             });
         } catch (e) {
             throw new Error(`[ConfirmationPanel] ${e}`);
