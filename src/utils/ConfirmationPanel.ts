@@ -1,10 +1,12 @@
-import { ActionRowBuilder, BaseInteraction, ButtonBuilder, ButtonInteraction, ButtonStyle, ColorResolvable, Colors, ComponentType, EmbedBuilder } from "discord.js";
+import { ActionRowBuilder, BaseInteraction, ButtonBuilder, ButtonInteraction, ButtonStyle, ColorResolvable, Colors, ComponentType, EmbedBuilder, MessageFlags } from "discord.js";
 
 interface ConfirmationPanelOptions {
     interaction: BaseInteraction
     embedTitle?: string;
     embedDescription?: string;
     embedColor?: ColorResolvable;
+    ephemeral?: boolean;
+
     onConfirm: (i: ButtonInteraction) => Promise<void> | void;
     onCancel?: (i: ButtonInteraction) => Promise<void> | void;
     timeout?: number;
@@ -27,6 +29,7 @@ class ConfirmationPanel {
             onConfirm, 
             onCancel, 
             timeout = 30_000,
+            ephemeral = false,
 
             confirmButtonLabel = "Conferma", 
             cancelButtonLabel = "Annulla", 
@@ -66,6 +69,7 @@ class ConfirmationPanel {
         const response = await interaction.reply({
             embeds: [embed],
             components: [row],
+            flags: ephemeral ? [MessageFlags.Ephemeral] : undefined,
         });
 
         try {
