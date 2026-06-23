@@ -73,7 +73,7 @@ class ConfirmationPanel {
         });
 
         try {
-            const collector = interaction.channel.createMessageComponentCollector({
+            const collector = response.createMessageComponentCollector({
                 componentType: ComponentType.Button,
                 filter: (i) => i.user.id === interaction.user.id && i.customId.startsWith(`confirmpanel:`) && i.customId.endsWith(interaction.id),
                 time: timeout,
@@ -81,7 +81,7 @@ class ConfirmationPanel {
             });
 
             collector.on("collect", async (i) => {
-                if(!i.isButton()) return;
+                if (!i.isButton()) return;
 
                 const action = i.customId.split(":")[1];
 
@@ -89,17 +89,16 @@ class ConfirmationPanel {
                     collector.stop("success");
                     await onConfirm(i);
                 } else {
-                    if(onCancel){
+                    if (onCancel) {
                         await onCancel(i);
-                    }else{
-                        i.deferUpdate();
+                    } else {
+                        await i.deferUpdate(); // ✅ awaited
                     }
-
                     collector.stop("cancelled");
                 }
             });
 
-            collector.on("end", (collected, reason) => {
+            collector.on("end", async (collected, reason) => {
                 if (reason === "cancelled") {
                     confirmButton.setStyle(ButtonStyle.Secondary);
                 } else if (reason === "success") {
@@ -113,12 +112,17 @@ class ConfirmationPanel {
                 confirmButton.setDisabled(true);
                 row.setComponents(confirmButton, cancelButton);
 
-                response.edit({
-                    embeds: [embed],
-                    components: [row],
-                });
+                try {
+                    await response.edit({ embeds: [embed], components: [row] }); // ✅ awaited + guarded
+                } catch {
+                    // Message deleted or interaction expired
+                }
             });
-        } catch (e) {
+        } catch (e: any) {
+            if (e?.code === "InteractionCollectorError" || e?.message?.includes("no interactions")) {
+                // Timed out with no interaction - expected, do nothing
+                return;
+            }
             throw new Error(`[ConfirmationPanel] ${e}`);
         }
     } 

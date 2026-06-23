@@ -19,7 +19,12 @@ abstract class BaseInteraction<T extends DiscordBaseInteraction, TBuilder> {
 
     public readonly disabled: boolean = false;
 
+    /**
+     * Once permissions have been validated, runs the method.
+     * @param interaction 
+     */
     protected abstract Run(interaction: T): Promise<void>;
+    protected abstract OnError(interaction: T, err: any): Promise<void>;
 
     private CheckRequiredRoles(interaction: T): boolean {
         // Allow interaction if no required roles have been defined.
@@ -122,6 +127,10 @@ abstract class BaseInteraction<T extends DiscordBaseInteraction, TBuilder> {
     private async HandleError(err: any, interaction: T) {
         console.error("An error was caught and sent to System Administrator.")
 
+        try {
+            await this.OnError(interaction, err);
+        }catch(e){} // Do nothing if it fails.
+
         const errorCode = crypto.randomUUID().slice(0, 8).toUpperCase();
         const errorName = err?.name ?? "UnknownError";
         const errorMessage = err?.message ?? "Nessun messaggio ricevuto.";
@@ -172,7 +181,7 @@ abstract class BaseInteraction<T extends DiscordBaseInteraction, TBuilder> {
         const response = { embeds: [userEmbed] };
 
         if (interaction.replied) {
-            await interaction.editReply(response);
+            await interaction.followUp(response);
         } else {
             await interaction.reply({...response, flags: [MessageFlags.Ephemeral]});
         }
