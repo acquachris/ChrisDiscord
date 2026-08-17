@@ -1,13 +1,21 @@
 import { AttachmentBuilder, codeBlock, BaseInteraction as DiscordBaseInteraction, EmbedBuilder, GuildMember, MessageFlags } from "discord.js";
 import { ClientManager } from "client/ClientManager.js";
 
-abstract class BaseInteraction<T extends DiscordBaseInteraction, TBuilder> {
-    protected readonly builder: TBuilder = this.CreateBuilder();
-    protected abstract CreateBuilder(): TBuilder;
+abstract class BaseInteraction<T extends DiscordBaseInteraction, TBuilder, TArgs extends any[] = []> {
+    protected abstract CreateBuilder(...args: TArgs): TBuilder;
 
-    public static GetBuilder(this: new () => BaseInteraction<any, any>){
+    /**
+     * Builds a fresh {@link TBuilder} for sending, using a throwaway instance.
+     * Args are typed from the subclass's own `extends BaseInteraction<..., ..., TArgs>`,
+     * so e.g. `class MyButton extends DiscordButton<[userId: string]>` gives a fully
+     * typed `MyButton.GetBuilder(userId)`.
+     */
+    public static GetBuilder<TInstance extends BaseInteraction<any, any, any[]>>(
+        this: new () => TInstance,
+        ...args: TInstance extends BaseInteraction<any, any, infer TArgs> ? TArgs : never
+    ): TInstance extends BaseInteraction<any, infer TBuilder, any> ? TBuilder : never {
         const instance = new this();
-        return instance.builder;
+        return (instance as BaseInteraction<any, any, any[]>).CreateBuilder(...args);
     }
 
     public abstract ValidateCustomId(customId: string): boolean;

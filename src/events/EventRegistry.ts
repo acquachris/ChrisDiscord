@@ -1,5 +1,6 @@
 import * as fs from "fs";
 import * as path from "path";
+import { pathToFileURL } from "url";
 import { BaseDiscordEvent } from "events/BaseDiscordEvent.js";
 
 class EventRegistry {
@@ -19,7 +20,7 @@ class EventRegistry {
 
             if (!entry.name.endsWith(".js") && !entry.name.endsWith(".ts")) continue;
 
-            const module = require(fullPath);
+            const module = await import(pathToFileURL(fullPath).href);
             const EventClass = module.default ?? module;
 
             if (!(EventClass.prototype instanceof BaseDiscordEvent)) continue;
