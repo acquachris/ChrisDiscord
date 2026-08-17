@@ -1,6 +1,6 @@
 {
     "name": "chrisdiscord",
-    "version": "1.4.10",
+    "version": "2.0.0",
     "description": "A Discord Client Manager for Discord.js",
     "keywords": [
         "discord.js",
