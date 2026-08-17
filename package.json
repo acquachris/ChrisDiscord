@@ -25,7 +25,7 @@
         "dev": "tsx watch src/index.ts",
         "build": "tsc --project tsconfig.json && tsc-alias -p tsconfig.json",
         "start": "node dist/index.js",
-        "publish": "npm run build && npm publish --access=public"
+        "release": "npm run build && npm publish --access=public"
     },
     "devDependencies": {
         "tsx": "^4.0.0",

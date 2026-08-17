@@ -66,13 +66,11 @@ class ConfirmationPanel {
             .setDescription(embedDescription)
             .setColor(embedColor)
             
-        await interaction.reply({
+        const response = await interaction.reply({
             embeds: [embed],
             components: [row],
             flags: ephemeral ? [MessageFlags.Ephemeral] : undefined,
         });
-
-        const response = await interaction.fetchReply();
 
         try {
             const collector = response.createMessageComponentCollector({
