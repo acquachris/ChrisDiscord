@@ -1,4 +1,4 @@
-import { AttachmentBuilder, BaseMessageOptions, codeBlock, BaseInteraction as DiscordBaseInteraction, EmbedBuilder, GuildMember, MessageFlags, RepliableInteraction } from "discord.js";
+import { AttachmentBuilder, BaseMessageOptions, codeBlock, BaseInteraction as DiscordBaseInteraction, EmbedBuilder, GuildMember, InteractionReplyOptions, MessageFlags, RepliableInteraction } from "discord.js";
 import { ClientManager } from "client/ClientManager.js";
 
 /** How long to wait before auto-showing a loading state, comfortably inside Discord's 3s ack deadline. */
@@ -139,7 +139,8 @@ abstract class BaseInteraction<T extends DiscordBaseInteraction, TBuilder, TArgs
 
         const original = this.GetOriginalMethods(interaction);
         const ephemeral = forceEphemeral ?? this.ephemeral;
-        const flags = ephemeral ? [MessageFlags.Ephemeral] as const : undefined;
+        const explicitFlags = (options as { flags?: InteractionReplyOptions["flags"] }).flags;
+        const flags = explicitFlags ?? (ephemeral ? [MessageFlags.Ephemeral] as const : undefined);
 
         try {
             if (interaction.deferred) {
