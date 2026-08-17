@@ -21,9 +21,17 @@ class InteractionRegistry<T extends BaseInteraction<any, any>> {
             if (!entry.name.endsWith(".js") && !entry.name.endsWith(".ts")) continue;
 
             const module = await import(pathToFileURL(fullPath).href);
-            const InteractionClass = module.default ?? module;
+            let InteractionClass = module.default ?? module;
 
-            if (!(InteractionClass.prototype instanceof BaseInteraction)) continue;
+            // When a CJS file (e.g. tsc-compiled `export default`) is loaded via dynamic
+            // import(), Node's interop puts the whole `module.exports` object (itself
+            // carrying a `.default`) on the namespace's `default`, instead of unwrapping it
+            // like require() does. Unwrap that extra layer here.
+            if (typeof InteractionClass !== "function" && InteractionClass?.default) {
+                InteractionClass = InteractionClass.default;
+            }
+
+            if (typeof InteractionClass !== "function" || !(InteractionClass.prototype instanceof BaseInteraction)) continue;
 
             const instance = new InteractionClass() as T;
             this.interactions.push(instance);

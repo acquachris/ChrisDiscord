@@ -21,9 +21,17 @@ class EventRegistry {
             if (!entry.name.endsWith(".js") && !entry.name.endsWith(".ts")) continue;
 
             const module = await import(pathToFileURL(fullPath).href);
-            const EventClass = module.default ?? module;
+            let EventClass = module.default ?? module;
 
-            if (!(EventClass.prototype instanceof BaseDiscordEvent)) continue;
+            // When a CJS file (e.g. tsc-compiled `export default`) is loaded via dynamic
+            // import(), Node's interop puts the whole `module.exports` object (itself
+            // carrying a `.default`) on the namespace's `default`, instead of unwrapping it
+            // like require() does. Unwrap that extra layer here.
+            if (typeof EventClass !== "function" && EventClass?.default) {
+                EventClass = EventClass.default;
+            }
+
+            if (typeof EventClass !== "function" || !(EventClass.prototype instanceof BaseDiscordEvent)) continue;
 
             const instance = new EventClass() as BaseDiscordEvent;
             this.events.push(instance);
