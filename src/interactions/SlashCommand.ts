@@ -2,8 +2,16 @@ import { ChatInputCommandInteraction, RESTPostAPIChatInputApplicationCommandsJSO
 import { BaseInteraction } from "interactions/BaseInteraction.js";
 
 abstract class SlashCommand extends BaseInteraction<ChatInputCommandInteraction, SlashCommandBuilder> {
-    public readonly builder: SlashCommandBuilder = this.CreateBuilder();
+    private _builder?: SlashCommandBuilder;
     private commandJson?: RESTPostAPIChatInputApplicationCommandsJSONBody;
+
+    /**
+     * Lazily built on first access (never as a field initializer), so that a subclass's
+     * own fields are already set by the time its CreateBuilder() override runs.
+     */
+    protected get builder(): SlashCommandBuilder {
+        return this._builder ??= this.CreateBuilder();
+    }
 
     public ValidateCustomId(name: string): boolean {
         return this.builder.name === name;

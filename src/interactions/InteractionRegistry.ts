@@ -1,5 +1,6 @@
 import * as fs from "fs";
 import * as path from "path";
+import { pathToFileURL } from "url";
 import { BaseInteraction } from "./BaseInteraction.js";
 
 class InteractionRegistry<T extends BaseInteraction<any, any>> {
@@ -19,7 +20,7 @@ class InteractionRegistry<T extends BaseInteraction<any, any>> {
 
             if (!entry.name.endsWith(".js") && !entry.name.endsWith(".ts")) continue;
 
-            const module = require(fullPath);
+            const module = await import(pathToFileURL(fullPath).href);
             const InteractionClass = module.default ?? module;
 
             if (!(InteractionClass.prototype instanceof BaseInteraction)) continue;
