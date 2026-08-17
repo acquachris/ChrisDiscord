@@ -166,7 +166,7 @@ abstract class BaseInteraction<T extends DiscordBaseInteraction, TBuilder, TArgs
      * @param interaction 
      */
     protected abstract Run(interaction: T): Promise<void>;
-    protected abstract OnError(interaction: T, err: any): Promise<void>;
+    protected OnError(interaction: T, err: any) {};
 
     private CheckRequiredRoles(interaction: T): boolean {
         // Allow interaction if no required roles have been defined.
