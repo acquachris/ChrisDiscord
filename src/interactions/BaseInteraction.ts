@@ -112,6 +112,17 @@ abstract class BaseInteraction<T extends DiscordBaseInteraction, TBuilder, TArgs
             return;
         }
 
+        if(this.disabled) {
+            const embed = new EmbedBuilder()
+                .setTitle("Non disponibile!")
+                .setColor("Red")
+                .setDescription("Questa funzione non è attualmente disponibile.");
+
+            if(!interaction.isRepliable()) return;
+            await interaction.reply({embeds: [embed], flags: [MessageFlags.Ephemeral]});
+            return;
+        }
+
         // Verify Is Testing Mode
         const isTestingMode = ClientManager.GetInstance().GetOptions().isTestingMode;
         if(isTestingMode && interaction.user.id !== ClientManager.GetInstance().GetOptions().ownerUserId){
