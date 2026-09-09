@@ -72,8 +72,15 @@ class ConfirmationPanel {
             flags: ephemeral ? [MessageFlags.Ephemeral] : undefined,
         });
 
+        // Fetch the actual confirmation-panel message. When `interaction` is itself a
+        // component interaction (e.g. a button click), InteractionResponse's own message
+        // resolution falls back to `interaction.message`, which is the message the
+        // triggering component was attached to - not the new panel message. Collecting
+        // off the fetched Message avoids that mismatch.
+        const message = await response.fetch();
+
         try {
-            const collector = response.createMessageComponentCollector({
+            const collector = message.createMessageComponentCollector({
                 componentType: ComponentType.Button,
                 filter: (i) => i.user.id === interaction.user.id && i.customId.startsWith(`confirmpanel:`) && i.customId.endsWith(interaction.id),
                 time: timeout,
